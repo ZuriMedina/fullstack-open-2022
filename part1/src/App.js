@@ -1,11 +1,34 @@
 import './App.css';
 import Mensaje from './Mensaje'
+import { List } from './List.js'
 import { useState } from 'react'
 
 //component
 const Counter = ({ contador }) => {
   return <h1>{contador}</h1>
 }
+
+const notes = [
+  {
+    id: 1,
+    content: 'HTML is easy',
+    date: '2019-05-30',
+    important: true,
+    categories: ['sports', 'hobby']
+  },
+  {
+    id: 2,
+    content: 'amore',
+    date: '2020-05-30',
+    important: true
+  },
+  {
+    id: 3,
+    content: 'queso',
+    date: '2021-05-30',
+    important: true
+  }
+]
 
 const App = (props) => {
 
@@ -44,9 +67,16 @@ const updateContador = contador[1]; */
       <button onClick={() => setRight(right + 1)}>
         right
       </button>
-
+      {/* Send message as prop */}
       <Mensaje color='red' message='Estamos trabajando, tal' />
       {firstName}
+      <br />
+      {/* renderizado de listas */}
+      <ul>
+        {notes.map((note) => (
+          <List key={note.id} id={note.id} content={note.content} date={note.date} categories={note.categories} />
+        ))}
+      </ul>
     </div>
   );
 }
