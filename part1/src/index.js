@@ -4,10 +4,32 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const notes = [
+  {
+    id: 1,
+    content: 'HTML is easy',
+    date: '2019-05-30',
+    important: true,
+    categories: ['sports', 'hobby']
+  },
+  {
+    id: 2,
+    content: 'amore',
+    date: '2020-05-30',
+    important: true
+  },
+  {
+    id: 3,
+    content: 'queso',
+    date: '2021-05-30',
+    important: false
+  }
+]
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <App notes={notes}/>
   </React.StrictMode>
 );
 
