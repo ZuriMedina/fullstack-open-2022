@@ -1,7 +1,8 @@
 import './App.css';
 import Mensaje from './Mensaje'
 import { List } from './List.js'
-import { useState } from 'react'
+import { ListApi } from './ListApi.js'
+import { useState, useEffect } from 'react'
 
 //component
 const Counter = ({ contador }) => {
@@ -57,6 +58,40 @@ const App = (props) => {
   }
 
 
+  ///////////////////////////List desde API/////////////////////////////////////////////////////////////////////////////////////
+
+  const [notes_api, setNotes_api] = useState([]);
+  const [newNotes_api, setNewnotes_api] = useState('');
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/todos/')
+      .then((response) => response.json())
+      .then((json) => {
+        setNotes_api(json)
+      })
+  }, [])
+
+  const handleChangeNoteApi = (event) => {
+    setNewnotes_api(event.target.value);
+  }
+
+  const handleSubmitNoteApi = (event) => {
+
+
+
+    event.preventDefault();
+
+    const noteApiToaddToState = {
+      id: notes_api.length + 1,
+      title: newNotes_api,
+      body: newNotes_api,
+    }
+
+    setNotes_api(notes_api.concat(noteApiToaddToState));
+    setNewnotes_api('');
+  }
+
+
   return (
     <div className="App">
 
@@ -100,8 +135,23 @@ const App = (props) => {
 
       <form onSubmit={handleSubmitNote}>
         <input type='text' onChange={handleChangeNote} value={newNote}></input>
+        <button>Crear Nota API</button>
+      </form>
+
+      {/* Imprimen las notas desde API */}
+      <h2>Notes List por API</h2>
+
+      <ul>
+        {notes_api.map((noteApi) => (
+          <ListApi key={noteApi.id} id={noteApi.id} title={noteApi.title} body={noteApi.body} />
+        ))}
+      </ul>
+
+      <form onSubmit={handleSubmitNoteApi}>
+        <input type='text' onChange={handleChangeNoteApi} value={newNotes_api}></input>
         <button>Crear Nota</button>
       </form>
+
     </div>
   );
 }

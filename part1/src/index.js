@@ -26,10 +26,28 @@ const notes = [
   }
 ]
 
+const notes_api = [
+  {
+    id: 1,
+    title: 'asdasasdadsasddasdasd',
+    body: '131232131231',
+  },
+  {
+    id: 2,
+    title: 'asdasasdadsasddasdasd',
+    body: '131232131231',
+  },
+  {
+    id: 3,
+    title: 'asdasasdadsasddasdasd',
+    body: '131232131231',
+  }
+]
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App notes={notes}/>
+    <App notes={notes} notes_api={notes_api} />
   </React.StrictMode>
 );
 
