@@ -2,7 +2,11 @@ import './App.css';
 import Mensaje from './Mensaje'
 import { List } from './List.js'
 import { ListApi } from './ListApi.js'
+import { getAllLists } from './services/lists/getAllLists.js'
+import { createList } from './services/lists/createList.js'
 import { useState, useEffect } from 'react'
+
+
 
 //component
 const Counter = ({ contador }) => {
@@ -62,13 +66,25 @@ const App = (props) => {
 
   const [notes_api, setNotes_api] = useState([]);
   const [newNotes_api, setNewnotes_api] = useState('');
+  //El DOM se genera sin esperar por la API (asíncrono), por lo que de esta forma mostramos algo hasta que se resuelva
+  //la promesa de axios o fetch
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/todos/')
-      .then((response) => response.json())
-      .then((json) => {
-        setNotes_api(json)
+    setLoading(true)
+
+    /*     fetch('https://jsonplaceholder.typicode.com/posts')
+          .then((response) => response.json())
+          .then((json) => {
+            setNotes_api(json)
+          }) */
+
+    getAllLists()
+      .then(notes_api => {
+        setNotes_api(notes_api)
+        setLoading(false)
       })
+
   }, [])
 
   const handleChangeNoteApi = (event) => {
@@ -77,17 +93,22 @@ const App = (props) => {
 
   const handleSubmitNoteApi = (event) => {
 
-
-
     event.preventDefault();
 
     const noteApiToaddToState = {
-      id: notes_api.length + 1,
       title: newNotes_api,
       body: newNotes_api,
+      userId: 1
     }
 
-    setNotes_api(notes_api.concat(noteApiToaddToState));
+    createList(noteApiToaddToState)
+      .then((newNotes_api) => {
+        setNotes_api(prevNotes_api => prevNotes_api.concat(newNotes_api))
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
     setNewnotes_api('');
   }
 
@@ -140,6 +161,8 @@ const App = (props) => {
 
       {/* Imprimen las notas desde API */}
       <h2>Notes List por API</h2>
+
+      <h3>{loading ? 'Cargando...' : ''}</h3>
 
       <ul>
         {notes_api.map((noteApi) => (
